@@ -293,15 +293,18 @@ class Chef
         config[:ssh_user].strip! unless config[:ssh_user].nil?
       end
 
+      def configure_identity_file
+        config[:identity_file] = (config[:identity_file] || Chef::Config[:knife][:ssh_identity_file])
+        config[:identity_file].strip! unless config[:identity_file].nil?
+      end
+
       def run
         @longest = 0
 
         load_late_dependencies
-
         configure_attribute
-
         configure_user
-
+        configure_identity_file
         configure_session
 
         case @name_args[1]
