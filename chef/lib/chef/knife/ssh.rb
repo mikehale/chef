@@ -282,10 +282,20 @@ class Chef
         end
       end
 
+      def configure_attribute
+        if Chef::Config[:knife][:ssh_attribute]
+          config[:attribute] = Chef::Config[:knife][:ssh_attribute]
+        end
+        config[:attribute] ||= "fqdn"
+        config[:attribute].strip!
+      end
+
       def run 
         @longest = 0
 
         load_late_dependencies
+
+        configure_attribute
 
         configure_session
 
