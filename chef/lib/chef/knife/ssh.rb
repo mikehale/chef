@@ -42,8 +42,7 @@ class Chef
       option :attribute,
         :short => "-a ATTR",
         :long => "--attribute ATTR",
-        :description => "The attribute to use for opening the connection - default is fqdn",
-        :default => "fqdn" 
+        :description => "The attribute to use for opening the connection - default is fqdn"
 
       option :manual,
         :short => "-m",
@@ -283,11 +282,9 @@ class Chef
       end
 
       def configure_attribute
-        if Chef::Config[:knife][:ssh_attribute]
-          config[:attribute] = Chef::Config[:knife][:ssh_attribute]
-        end
-        config[:attribute] ||= "fqdn"
-        config[:attribute].strip!
+        config[:attribute] = (config[:attribute] ||
+          Chef::Config[:knife][:ssh_attribute] ||
+          "fqdn").strip
       end
 
       def run 
