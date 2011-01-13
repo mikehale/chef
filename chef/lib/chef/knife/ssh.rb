@@ -283,22 +283,30 @@ class Chef
 
       def configure_attribute
         config[:attribute] = (config[:attribute] ||
-          Chef::Config[:knife][:ssh_attribute] ||
-          "fqdn").strip
+                              Chef::Config[:knife][:ssh_attribute] ||
+                              "fqdn").strip
       end
 
-      def run 
+      def configure_user
+        config[:ssh_user] = (config[:ssh_user] ||
+                             Chef::Config[:knife][:ssh_user])
+        config[:ssh_user].strip! unless config[:ssh_user].nil?
+      end
+
+      def run
         @longest = 0
 
         load_late_dependencies
 
         configure_attribute
 
+        configure_user
+
         configure_session
 
         case @name_args[1]
         when "interactive"
-          interactive 
+          interactive
         when "screen"
           screen
         when "tmux"
